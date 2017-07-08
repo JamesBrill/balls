@@ -11,6 +11,8 @@ WINDOWHEIGHT = 400
 NUMBER_OF_BALLS = 1
 BLACK = (0, 0, 0)
 GRAVITY = (math.pi, 0.5)
+DRAG = 0.9999
+ELASTICITY = 0.9
 windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
 pygame.display.set_caption('Balls')
 
@@ -49,12 +51,15 @@ while True:
         if ball['x'] - ball['radius'] < 0 or ball['x'] + ball['radius'] > WINDOWWIDTH:
             ball['angle'] = 2 * math.pi - ball['angle']
             ball['x'] = min(max(ball['x'], ball['radius']), WINDOWWIDTH - ball['radius'])
+            ball['speed'] *= ELASTICITY
 
         if ball['y'] - ball['radius'] < 0 or ball['y'] + ball['radius'] > WINDOWHEIGHT:
             ball['angle'] = math.pi - ball['angle']
             ball['y'] = min(max(ball['y'], ball['radius']), WINDOWHEIGHT - ball['radius'])
+            ball['speed'] *= ELASTICITY
 
         (ball['angle'], ball['speed']) = add_vectors(ball['angle'], ball['speed'], GRAVITY[0], GRAVITY[1])
+        ball['speed'] *= DRAG
         pygame.draw.circle(windowSurface, ball['color'], (int(ball['x']), int(ball['y'])), ball['radius'])
 
     pygame.display.update()
