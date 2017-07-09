@@ -82,10 +82,7 @@ while True:
     windowSurface.fill(BLACK)
 
     for i, ball in enumerate(balls):
-        before = ball['speed']
         move(ball)
-        if ball['speed'] > before:
-            print('speed increased', before, ball['speed'])
         for other_ball in balls[i + 1:]:
             collide(ball, other_ball)
         pygame.draw.circle(windowSurface, ball['color'], (int(ball['x']), int(ball['y'])), ball['radius'])
