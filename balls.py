@@ -5,15 +5,16 @@ import time
 from pygame.locals import *
 import math
 
-pygame.init()
-WINDOWWIDTH = 400
-WINDOWHEIGHT = 400
+WINDOW_WIDTH = 400
+WINDOW_HEIGHT = 400
 NUMBER_OF_BALLS = 200
 BLACK = (0, 0, 0)
 GRAVITY = (math.pi, 0.5)
 DRAG = 0.9999
 ELASTICITY = 0.9
-windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
+
+pygame.init()
+windowSurface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), 0, 32)
 pygame.display.set_caption('Balls')
 
 balls = []
@@ -41,14 +42,14 @@ def move(ball):
     ball['x'] += math.sin(ball['angle']) * ball['speed']
     ball['y'] -= math.cos(ball['angle']) * ball['speed']
 
-    if ball['x'] - ball['radius'] < 0 or ball['x'] + ball['radius'] > WINDOWWIDTH:
+    if ball['x'] - ball['radius'] < 0 or ball['x'] + ball['radius'] > WINDOW_WIDTH:
         ball['angle'] = 2 * math.pi - ball['angle']
-        ball['x'] = min(max(ball['x'], ball['radius']), WINDOWWIDTH - ball['radius'])
+        ball['x'] = min(max(ball['x'], ball['radius']), WINDOW_WIDTH - ball['radius'])
         ball['speed'] *= ELASTICITY
 
-    if ball['y'] - ball['radius'] < 0 or ball['y'] + ball['radius'] > WINDOWHEIGHT:
+    if ball['y'] - ball['radius'] < 0 or ball['y'] + ball['radius'] > WINDOW_HEIGHT:
         ball['angle'] = math.pi - ball['angle']
-        ball['y'] = min(max(ball['y'], ball['radius']), WINDOWHEIGHT - ball['radius'])
+        ball['y'] = min(max(ball['y'], ball['radius']), WINDOW_HEIGHT - ball['radius'])
         ball['speed'] *= ELASTICITY
 
     (ball['angle'], ball['speed']) = add_vectors(ball['angle'], ball['speed'], GRAVITY[0], GRAVITY[1])
@@ -66,6 +67,7 @@ def collide(ball1, ball2):
         (ball1['speed'], ball2['speed']) = (ball2['speed'], ball1['speed'])
         ball1['speed'] *= ELASTICITY
         ball2['speed'] *= ELASTICITY
+        # Adjust for overlap between the two balls
         overlap = ball1['radius'] + ball2['radius'] - distance
         angle = 0.5 * math.pi + tangent
         ball1['x'] += (math.sin(angle) * 0.5 * overlap)
